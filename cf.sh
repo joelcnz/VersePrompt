@@ -1,0 +1,1 @@
+dmd *.d -ofrun -L-L. libdallegro5.a libjeca.a libjext.a -I../OtherPeoples/dallegro5 -I../Jeca -I../Jext
