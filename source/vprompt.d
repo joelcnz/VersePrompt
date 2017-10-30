@@ -26,7 +26,8 @@ private {
 	import base;
 }
 
-const LOG = "16 August 2017 - At Cecily's (ripping CD's) Look at word count status, auto select, grades system";
+const LOG = "31 October 2017 - Can't sleep, long day. Adding having to put your name in.";
+//const LOG = "16 August 2017 - At Cecily's (ripping CD's) Look at word count status, auto select, grades system";
 //const LOG = "14 August - turn on auto scroll";
 //const LOG = "13 August 2017 - Emily's 3rd Birthday. Working on the Letter library, to trying to use less battery";
 //const LOG = "11 August 2017 - Making status updates better (eg. history.txt)";
@@ -78,7 +79,7 @@ int main(string[] args) {
 		writeln( "This is a Linux version of Verse Prompt." );
 	}
 
-	if (setupAndStuff != 0) {
+	if (setupAndStuff(args) != 0) {
 		import std.stdio: writeln;
 
 		writeln("Error in setupAndStuff!");
@@ -87,7 +88,7 @@ int main(string[] args) {
 	return 0;
 }
 
-auto setupAndStuff() {
+auto setupAndStuff(in string[] args) {
 	immutable WELCOME = "Welcome to VersePrompt";
 	g_window = new RenderWindow(VideoMode(800, 600), WELCOME);
 
@@ -133,6 +134,15 @@ auto setupAndStuff() {
     g_window.setFramerateLimit(60);
 
 	g_letterBase = new LetterManager("lemgreen32.bmp", 8, 17, Square(0,0, g_window.getSize.x, g_window.getSize.y));
+
+	if (args.length > 1) {
+		import std.string: join;
+
+		updateFileNLetterBase("User Name: ", args[1 .. $].join(" "));
+	} else {
+		upDateStatus("You must specify your name, eg './vprompt Joel'");
+		return -1;
+	}
 
 	with(g_letterBase) {
 		updateFileNLetterBase("Version: " ~ LOG ~ newline ~ newline ~ 

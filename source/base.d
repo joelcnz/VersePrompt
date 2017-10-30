@@ -1,6 +1,4 @@
-//#not used
-//#not much
-//input display an do not work on Mac
+//#try this one
 module base;
 
 import std.stdio;
@@ -16,9 +14,10 @@ public import jec;
 LetterManager g_letterBase;
 
 void updateFileNLetterBase(T...)(T args) {
-	import std.typecons: tuple; // untested
+	import std.typecons: tuple;
 	import std.conv: text;
 
+	//g_letterBase.addTextln(args); //#try this one
 	g_letterBase.addTextln(text(tuple(args).expand));
 	upDateStatus(args);
 }
