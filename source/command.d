@@ -42,6 +42,8 @@ public:
 	*/
 	enum Command : string {GO_TO_NEXT_VERSE = "n", SET_VERSE_BY_REFERENCE = "s", SET_VERSE_BY_INDEX = "svi", HELP = "h", VERSE = "v",
 		CLEAR = "c", LIST = "l", FILE_CONTROL = "f", DO_TEST = "t", QUIT = "q"}
+	enum CommandLong : string {GO_TO_NEXT_VERSE = "next", SET_VERSE_BY_REFERENCE = "set", SET_VERSE_BY_INDEX = "setbyindex",
+		HELP = "help", VERSE = "verse",	CLEAR = "clear", LIST = "list", FILE_CONTROL = "file", DO_TEST = "test", QUIT = "quit"}
 	
 	this() {
 		// Start with no verses in section
@@ -127,23 +129,15 @@ public:
 //						userInput = "q";
 					if (userInput.length > 0)
 					{
-						isVerse = YES; // is it a verse (or a command)
+						isVerse = NO; // is it a verse (or a command)
 						// Commands are all one character and index 0
-						if (userInput.length == 1)
+						if (userInput.length) // == 1)
 						{
-							// check to see if verse or command
-							with (Command)
-								//#dont think SET_VERSE will work
-								foreach (command; [HELP, CLEAR, LIST, VERSE, FILE_CONTROL, GO_TO_NEXT_VERSE,
-												DO_TEST, QUIT])
-									if (userInput == command)
-										isVerse = NO; // do not treat as verse
-
 							// If command not used, the user input is treated as thing typed from memory
 							// Switch on command
 							switch (userInput) {
 								// Display help
-								case  Command.HELP:
+								case  "h", "help":
 									with (Command)
 										g_letterBase.addTextln("Help:" ~ newline ~
 											QUIT ~ " - Quit" ~ newline ~
@@ -171,7 +165,7 @@ public:
 								+/
 								break;
 								// List verses to choose from
-								case Command.LIST:
+								case "l", "list":
 									if (_section.isClear == false)
 									{
 										updateFileNLetterBase("Current section:");
@@ -180,29 +174,30 @@ public:
 									}
 								break;
 								// Clear screen (hide verses)
-								case Command.CLEAR:
+								case "c", "cls", "clear":
 									clearScreen(/* ref */ prefix);
 									//enterPressed = false;
 									//header = true;
 								break;
 								// display current verse
-								case Command.VERSE:
+								case "v", "verse":
 									if (_section.isClear == false)
 										updateFileNLetterBase(newline ~ _section.getCurrentVerse ~ newline);
 									else
 										updateFileNLetterBase("There /is/ no current verse.");
 								break;
 								// Go to file control: add, load and save
-								case Command.FILE_CONTROL:
+								case "f","file":
 									doExit = doFileCommand();
 									enterPressed = false;
 									header = true;
 								break;
 								// quit program
-								case Command.QUIT:
+								case "q", "quit":
 									done = true;
 								break;
 								default:
+									isVerse = YES;
 								break;
 							} // switch userInput[0]
 						} // if length == 1
@@ -257,7 +252,7 @@ auto update(ref int prefix, ref bool enterPressed) {
 	
 	string userInput = "";
 	if (enterPressed) {
-		userInput = g_letterBase.getText()[prefix .. $ ].stripRight;
+		userInput = g_letterBase.getText()[prefix .. $].stripRight;
 		upDateStatus(userInput);
 		debug
 			mixin( traceList( "prefix", "g_letterBase.count", "userInput" ) );

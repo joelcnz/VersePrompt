@@ -26,7 +26,8 @@ private {
 	import base;
 }
 
-const LOG = "31 October 2017 - Can't sleep, long day. Adding having to put your name in.";
+const LOG = "1 March 2018 - Added printing a letter for finding the right terminal.";
+//const LOG = "31 October 2017 - Can't sleep, long day. Adding having to put your name in.";
 //const LOG = "16 August 2017 - At Cecily's (ripping CD's) Look at word count status, auto select, grades system";
 //const LOG = "14 August - turn on auto scroll";
 //const LOG = "13 August 2017 - Emily's 3rd Birthday. Working on the Letter library, to trying to use less battery";
@@ -69,6 +70,16 @@ const LOG = "31 October 2017 - Can't sleep, long day. Adding having to put your 
 	Creates and starts the command object
  */
 int main(string[] args) {
+	scope(exit) {
+		writeln;
+		writeln("# #");
+		writeln("# #");
+		writeln("# #");
+		writeln(" # ");
+		writeln(" # ");
+		writeln;
+	}
+	
 	version(Windows) {
 		writeln( "This is a Windows version of Verse Prompt." );
 	}
@@ -79,10 +90,14 @@ int main(string[] args) {
 		writeln( "This is a Linux version of Verse Prompt." );
 	}
 
-	if (setupAndStuff(args) != 0) {
+	int retVal = setupAndStuff(args);
+	if (retVal != 0) {
 		import std.stdio: writeln;
 
-		writeln("Error in setupAndStuff!");
+		if (retVal == -10)
+			writeln("You must enter you name when launching this program (eg. './vprompt Joel')");
+		else
+			writeln("Error in setupAndStuff!");
 	}
 
 	return 0;
@@ -140,8 +155,7 @@ auto setupAndStuff(in string[] args) {
 
 		updateFileNLetterBase("User Name: ", args[1 .. $].join(" "));
 	} else {
-		upDateStatus("You must specify your name, eg './vprompt Joel'");
-		return -1;
+		return -10;
 	}
 
 	with(g_letterBase) {
@@ -150,7 +164,7 @@ auto setupAndStuff(in string[] args) {
 		setLockAll(true);
 	}
 
-	( new Command() ).run();
+	(new Command().run);
 
 	return 0;
 }

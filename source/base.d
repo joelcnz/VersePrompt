@@ -3,7 +3,7 @@ module base;
 
 import std.stdio;
 import std.string;
-import std.datetime;
+import std.datetime.stopwatch;
 import std.conv;
 import std.range;
 
@@ -18,7 +18,8 @@ void updateFileNLetterBase(T...)(T args) {
 	import std.conv: text;
 
 	//g_letterBase.addTextln(args); //#try this one
-	g_letterBase.addTextln(text(tuple(args).expand));
+	//g_letterBase.addTextln(text(tuple(args).expand));
+	g_letterBase.addTextln(text(args));
 	upDateStatus(args);
 }
 
